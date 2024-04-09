@@ -33,22 +33,19 @@ function App() {
   }
 
   async function sendMsgToServer(text) {
-    const url = new URL(`http://sam-meows.com/api/meow?request=${text}`);
-    const options = {
-      base: "http://sam-meows.com/",
-    };
-
-    // const response = await fetch(url, options);
-    const response = await axios.post(
-      `http://sam-meows.com/api/meow?request=${text}`
+    const response = await axios.get(
+      `https://sam-meows.com/api/meow?request=${text}`
     );
     console.log(response);
   }
 
   return (
     <main
-      className="w-[395px] h-[810px] flex flex-col justify-center p-[25px] relative"
-      style={{ backgroundColor: isOpen ? "#FFFFFF" : "#FFFEFA" }}
+      className="w-[395px] h-[100vh] flex flex-col justify-center p-[25px] relative"
+      style={{
+        backgroundColor: isOpen ? "#FFFFFF" : "#FFFEFA",
+        marginTop: isOpen ? "0" : "-70px",
+      }}
     >
       <div className="flex flex-col items-center gap-[15px]">
         <h2
