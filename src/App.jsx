@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import "./App.css";
-import Send from "./img/send.svg";
-import Cat from "./img/cat.png";
-import Grad from "./img/background.svg";
+import Send from "./assets/send.svg";
+import Cat from "./assets/cat.png";
+import Grad from "./assets/background.svg";
 
 function App() {
   const [myMsg, setMyMsg] = useState([]);
