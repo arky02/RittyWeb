@@ -17,7 +17,7 @@ function App() {
   function sendMyText() {
     const newMessage = text;
     if (newMessage) {
-      setMsgList((prev) => [...prev, "m:" + text]);
+      setMsgList((prev) => [...prev, "me:" + text]);
       sendMsgToServer(text);
       setText("");
     } else {
@@ -27,18 +27,23 @@ function App() {
 
   function sendMyTextByEnter(e) {
     if (e.target.value.includes("\n")) {
-      setMsgList((prev) => [...prev, "m:" + text]);
+      setMsgList((prev) => [...prev, "me:" + text]);
       sendMsgToServer(text);
       setText("");
     }
   }
 
   async function sendMsgToServer(text) {
+    setMsgList((prev) => [...prev, "cat: loading"]);
     const response = await axios.get(
       `https://sam-meows.com/api/meow?request=${text}`
     );
-    console.log(response.data.message);
-    setMsgList((prev) => [...prev, response.data.message]);
+    // console.log(response.data.message);
+
+    setMsgList((prev) => [
+      ...prev.filter((el) => el !== "cat: loading"),
+      response.data.message,
+    ]);
   }
 
   return (
@@ -101,7 +106,7 @@ function App() {
 
               {msgList.length > 0 &&
                 msgList.map((msgEl, idx) =>
-                  msgEl.split(":")[0] === "m" ? (
+                  msgEl.split(":")[0] === "me" ? (
                     <div
                       key={idx}
                       className="inline-block max-w-[300px] text-sm relative mx-0 my-[5px] bg-[#8f00fe] float-right clear-both text-white px-[15px] py-[7px] rounded-[14px_14px_0_14px]"
@@ -110,7 +115,15 @@ function App() {
                     </div>
                   ) : (
                     <div className="inline-block max-w-[300px] text-sm relative mx-0 my-[5px] bg-[#ffffff] float-left clear-both text-[#8f00fe] px-[15px] py-[7px] rounded-[14px_14px_14px_0]">
-                      {msgEl.split(":")[1]}
+                      {msgEl === "cat: loading" ? (
+                        <div class="flex space-x-1 justify-center items-center bg-white p-[5px] ">
+                          <div class="h-[5px] w-[5px] bg-[#a8a8a8] rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                          <div class="h-[5px] w-[5px] bg-[#a8a8a8] rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                          <div class="h-[5px] w-[5px] bg-[#a8a8a8] rounded-full animate-bounce"></div>
+                        </div>
+                      ) : (
+                        msgEl.split(":")[1]
+                      )}
                     </div>
                   )
                 )}
@@ -119,7 +132,7 @@ function App() {
             <motion.div whileTap={{ scale: 0.97 }}>
               <div
                 onClick={() => setIsOpen(true)}
-                className="flex relative justify-between items-center w-full h-20 p-[7px]  "
+                className="flex relative justify-between items-center w-full h-20 p-[6px]  "
               >
                 <textarea
                   className="w-full h-[50px] resize-none rounded-[30px] py-[10px] pl-[22px] pr-[32px] border-[#E8E8E8] border-[1px]"
