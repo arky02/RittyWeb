@@ -4,11 +4,13 @@ import "./App.css";
 import Send from "./assets/send.svg";
 import Cat from "./assets/cat.png";
 import Grad from "./assets/background.svg";
+import Modal from "./components/Modal";
 
 function App() {
   const [myMsg, setMyMsg] = useState([]);
   const [text, setText] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   function sendMyText() {
     const newMessage = text;
@@ -34,19 +36,21 @@ function App() {
     >
       <div className="flex flex-col items-center gap-[30px]">
         <h2
-          className="text-[24px] text-center"
-          style={{ marginBottom: isOpen ? "0" : "70px" }}
+          className="text-[24px] "
+          style={{
+            textAlign: isOpen ? "left" : "center",
+            marginBottom: isOpen ? "0" : "70px",
+            marginLeft: isOpen ? "-180px" : 0,
+          }}
         >
-          현재 <span className="font-semibold">12,903명</span>이{" "}
-          {!isOpen && <p></p>}
+          현재 <span className="font-semibold">12,903명</span>이 <p></p>
           <span>야옹이 입양중</span>
         </h2>
         <section className="w-full">
           <div className="flex flex-row justify-between w-full z-10 relative mb-[10px]">
             <input
-              className="bg-[#f1f1f1] border-[#f2f2f2] border-[1px] p-3 rounded-[10px] w-[260px]"
+              className="bg-[#ffffff] border-[#f2f2f2] shadow border-[1px] p-3 rounded-[10px] w-[260px]"
               placeholder="Email"
-              style={{ backgroundColor: isOpen ? "#f1f1f1" : "#FFFFFF" }}
             />
 
             <motion.div whileTap={{ scale: 0.9 }}>
@@ -119,6 +123,13 @@ function App() {
           </section>
         </motion.div>
       </div>
+      <Modal
+        isOpen={isModalOpen}
+        title={"야옹이의 간택을 받으셨습니다!"}
+        description={"너 좀 내 취향인데? 나의 집사가 돼라 냥~"}
+        onClose={() => setIsModalOpen(false)}
+        buttonText="입양하러 가기"
+      ></Modal>
     </main>
   );
 }
