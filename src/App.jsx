@@ -5,6 +5,7 @@ import Send from "./assets/send.svg";
 import Cat from "./assets/cat.png";
 import Grad from "./assets/background.svg";
 import Modal from "./components/Modal";
+import axios from "axios";
 
 function App() {
   const [myMsg, setMyMsg] = useState([]);
@@ -16,6 +17,7 @@ function App() {
     const newMessage = text;
     if (newMessage) {
       setMyMsg((prev) => [...prev, text]);
+      sendMsgToServer(text);
       setText("");
     } else {
       alert("메시지를 입력하세요...");
@@ -25,8 +27,22 @@ function App() {
   function sendMyTextByEnter(e) {
     if (e.target.value.includes("\n")) {
       setMyMsg((prev) => [...prev, text]);
+      sendMsgToServer(text);
       setText("");
     }
+  }
+
+  async function sendMsgToServer(text) {
+    const url = new URL(`http://sam-meows.com/api/meow?request=${text}`);
+    const options = {
+      base: "http://sam-meows.com/",
+    };
+
+    // const response = await fetch(url, options);
+    const response = await axios.post(
+      `http://sam-meows.com/api/meow?request=${text}`
+    );
+    console.log(response);
   }
 
   return (
@@ -102,7 +118,7 @@ function App() {
                 className="flex relative justify-between items-center w-full h-20 p-[7px]  "
               >
                 <textarea
-                  className="w-full h-[50px] resize-none rounded-[30px] py-[10px] px-[20px] border-[#E8E8E8] border-[1px]"
+                  className="w-full h-[50px] resize-none rounded-[30px] py-[10px] pl-[22px] pr-[32px] border-[#E8E8E8] border-[1px]"
                   placeholder="메시지를 입력하세요..."
                   value={text}
                   text={text}
