@@ -47,12 +47,12 @@ function App() {
 
   return (
     <main
-      className="w-[395px] h-[810px] flex flex-col justify-center p-[20px] relative"
+      className="w-[395px] h-[810px] flex flex-col justify-center p-[25px] relative"
       style={{ backgroundColor: isOpen ? "#FFFFFF" : "#FFFEFA" }}
     >
-      <div className="flex flex-col items-center gap-[30px]">
+      <div className="flex flex-col items-center gap-[15px]">
         <h2
-          className="text-[24px] "
+          className="text-[22px] "
           style={{
             textAlign: isOpen ? "left" : "center",
             marginBottom: isOpen ? "0" : "70px",
@@ -65,7 +65,7 @@ function App() {
         <section className="w-full">
           <div className="flex flex-row justify-between w-full z-10 relative mb-[10px]">
             <input
-              className="bg-[#ffffff] border-[#f2f2f2] shadow border-[1px] p-3 rounded-[10px] w-[260px]"
+              className="bg-[#ffffff] border-[#f2f2f2] shadow border-[1px] p-3 rounded-[10px] w-[250px]"
               placeholder="Email"
             />
 
@@ -92,9 +92,9 @@ function App() {
             ></img>
           )}
         </motion.div>
-        <motion.div layout style={{ height: isOpen ? "370px" : "0px" }}>
-          <section className="flex flex-col h-full bg-[#f1f1f1] w-[360px] rounded-[20px]">
-            <div className="h-[350px] w-full overflow-y-auto px-2.5 py-3 ">
+        <motion.div layout style={{ height: isOpen ? "330px" : "0px" }}>
+          <section className="flex flex-col h-full bg-[#f1f1f1] w-[345px] rounded-[20px]">
+            <div className="h-[330px] w-full overflow-y-auto px-2.5 py-3 ">
               {isOpen && (
                 <div className="inline-block max-w-[300px] text-sm relative mx-0 my-[5px] bg-[#ffffff] float-left clear-both text-[#8f00fe] px-[15px] py-[7px] rounded-[14px_14px_14px_0]">
                   안녕! 나는 삼냥이야
