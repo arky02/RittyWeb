@@ -8,15 +8,16 @@ import Modal from "./components/Modal";
 import axios from "axios";
 
 function App() {
-  const [myMsg, setMyMsg] = useState([]);
+  const [msgList, setMsgList] = useState([]);
   const [text, setText] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [responses, setResponses] = useState([]);
 
   function sendMyText() {
     const newMessage = text;
     if (newMessage) {
-      setMyMsg((prev) => [...prev, text]);
+      setMsgList((prev) => [...prev, "m:" + text]);
       sendMsgToServer(text);
       setText("");
     } else {
@@ -26,7 +27,7 @@ function App() {
 
   function sendMyTextByEnter(e) {
     if (e.target.value.includes("\n")) {
-      setMyMsg((prev) => [...prev, text]);
+      setMsgList((prev) => [...prev, "m:" + text]);
       sendMsgToServer(text);
       setText("");
     }
@@ -36,7 +37,8 @@ function App() {
     const response = await axios.get(
       `https://sam-meows.com/api/meow?request=${text}`
     );
-    console.log(response);
+    console.log(response.data.message);
+    setMsgList((prev) => [...prev, response.data.message]);
   }
 
   return (
@@ -97,15 +99,21 @@ function App() {
                 </div>
               )}
 
-              {myMsg.length > 0 &&
-                myMsg.map((msgEl, idx) => (
-                  <div
-                    key={idx}
-                    className="inline-block max-w-[300px] text-sm relative mx-0 my-[5px] bg-[#8f00fe] float-right clear-both text-white px-[15px] py-[7px] rounded-[14px_14px_0_14px]"
-                  >
-                    {msgEl}
-                  </div>
-                ))}
+              {msgList.length > 0 &&
+                msgList.map((msgEl, idx) =>
+                  msgEl.split(":")[0] === "m" ? (
+                    <div
+                      key={idx}
+                      className="inline-block max-w-[300px] text-sm relative mx-0 my-[5px] bg-[#8f00fe] float-right clear-both text-white px-[15px] py-[7px] rounded-[14px_14px_0_14px]"
+                    >
+                      {msgEl.split(":")[1]}
+                    </div>
+                  ) : (
+                    <div className="inline-block max-w-[300px] text-sm relative mx-0 my-[5px] bg-[#ffffff] float-left clear-both text-[#8f00fe] px-[15px] py-[7px] rounded-[14px_14px_14px_0]">
+                      {msgEl.split(":")[1]}
+                    </div>
+                  )
+                )}
             </div>
 
             <motion.div whileTap={{ scale: 0.97 }}>
