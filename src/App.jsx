@@ -12,7 +12,7 @@ function App() {
   const [text, setText] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [responses, setResponses] = useState([]);
+  const [count, setCount] = useState(0);
 
   function sendMyText() {
     const newMessage = text;
@@ -44,16 +44,19 @@ function App() {
       ...prev.filter((el) => el !== "cat: loading"),
       response.data.message,
     ]);
+
+    if (response.status === 200) setCount((prev) => (prev += 1));
+    if (count >= 10) setIsModalOpen(true);
   }
 
   return (
     <main
-      className="w-[395px] h-[100vh] flex flex-col md:justify-center  md:-mt-[20px] mt-[10px] p-[25px] relative overflow-x-hidden"
+      className="w-[395px] h-[100dvh] flex flex-col md:justify-center  md:-mt-[20px] mt-[10px] p-[25px] relative overflow-x-hidden"
       style={{
         backgroundColor: isOpen ? "#FFFFFF" : "#FFFEFA",
       }}
     >
-      <div className="flex flex-col items-center gap-[15px]">
+      <div className="flex flex-col items-center gap-[12px]">
         <h2
           className="text-[22px] "
           style={{
@@ -82,8 +85,8 @@ function App() {
         <motion.div whileTap={{ scale: isOpen ? 0.9 : 1 }}>
           <img
             src={Cat}
-            width={209}
-            height={218}
+            width={isOpen ? 199 : 209}
+            height={isOpen ? 208 : 218}
             className="relative z-10"
           ></img>
           {isOpen || (
@@ -114,12 +117,15 @@ function App() {
                       {msgEl.split(":")[1]}
                     </div>
                   ) : (
-                    <div className="inline-block max-w-[300px] text-sm relative mx-0 my-[5px] bg-[#ffffff] float-left clear-both text-[#8f00fe] px-[15px] py-[7px] rounded-[14px_14px_14px_0]">
+                    <div
+                      key={idx}
+                      className="inline-block max-w-[300px] text-sm relative mx-0 my-[5px] bg-[#ffffff] float-left clear-both text-[#8f00fe] px-[15px] py-[7px] rounded-[14px_14px_14px_0]"
+                    >
                       {msgEl === "cat: loading" ? (
-                        <div class="flex space-x-1 justify-center items-center bg-white p-[5px] ">
-                          <div class="h-[5px] w-[5px] bg-[#a8a8a8] rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-                          <div class="h-[5px] w-[5px] bg-[#a8a8a8] rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-                          <div class="h-[5px] w-[5px] bg-[#a8a8a8] rounded-full animate-bounce"></div>
+                        <div className="flex space-x-1 justify-center items-center bg-white p-[5px] ">
+                          <div className="h-[5px] w-[5px] bg-[#a8a8a8] rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                          <div className="h-[5px] w-[5px] bg-[#a8a8a8] rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                          <div className="h-[5px] w-[5px] bg-[#a8a8a8] rounded-full animate-bounce"></div>
                         </div>
                       ) : (
                         msgEl.split(":")[1]
