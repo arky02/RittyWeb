@@ -41,10 +41,9 @@ function App() {
 
   return (
     <main
-      className="w-[395px] h-[100vh] flex flex-col justify-center p-[25px] relative"
+      className="w-[395px] h-[100vh] flex flex-col md:justify-center  md:-mt-[20px] mt-[10px] p-[25px] relative overflow-x-hidden"
       style={{
         backgroundColor: isOpen ? "#FFFFFF" : "#FFFEFA",
-        marginTop: isOpen ? "0" : "-70px",
       }}
     >
       <div className="flex flex-col items-center gap-[15px]">
