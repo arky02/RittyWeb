@@ -51,7 +51,7 @@ function App() {
 
   return (
     <main
-      className="w-[395px] h-[100svh] flex flex-col md:justify-center  md:-mt-[20px] mt-[10px] p-[25px] relative overflow-x-hidden"
+      className="w-[395px] h-[100vh] flex flex-col md:justify-center  md:-mt-[20px] mt-[10px] p-[25px] relative overflow-x-hidden"
       style={{
         backgroundColor: isOpen ? "#FFFFFF" : "#FFFEFA",
       }}
