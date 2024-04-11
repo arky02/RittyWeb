@@ -15,10 +15,14 @@ function App() {
   const [count, setCount] = useState(0);
 
   function sendMyText() {
-    const newMessage = text;
-    if (newMessage) {
-      setMsgList((prev) => [...prev, "me:" + text]);
-      sendMsgToServer(text);
+    const newMessage = {
+      id: "user",
+      action: "none",
+      content: text,
+    };
+    if (text) {
+      setMsgList((prev) => [...prev, newMessage]);
+      sendMsgToServer([...msgList, newMessage]);
       setText("");
     } else {
       alert("메시지를 입력하세요...");
@@ -26,22 +30,33 @@ function App() {
   }
 
   function sendMyTextByEnter(e) {
+    const newMessage = {
+      id: "user",
+      action: "none",
+      content: text,
+    };
     if (e.target.value.includes("\n")) {
-      setMsgList((prev) => [...prev, "me:" + text]);
-      sendMsgToServer(text);
+      setMsgList((prev) => [...prev, newMessage]);
+      sendMsgToServer([...msgList, newMessage]);
       setText("");
     }
   }
 
-  async function sendMsgToServer(text) {
-    setMsgList((prev) => [...prev, "cat: loading"]);
-    const response = await axios.get(
-      `https://sam-meows.com/api/meow?request=${text}`
-    );
-    // console.log(response.data.message);
+  async function sendMsgToServer(messageList) {
+    const loadingMsg = {
+      id: "ritty",
+      action: "loading",
+      content: "loading",
+    };
+
+    setMsgList((prev) => [...prev, loadingMsg]);
+
+    const response = await axios.post(`https://sam-meows.com/api/meow`, {
+      message: messageList,
+    });
 
     setMsgList((prev) => [
-      ...prev.filter((el) => el !== "cat: loading"),
+      ...prev.filter((el) => el.action !== "loading"),
       response.data.message,
     ]);
 
@@ -51,37 +66,37 @@ function App() {
 
   return (
     <main
-      className="sm:w-[395px] w-[100vw] h-[100vh] flex flex-col md:justify-center pt-[70px] md:pt-0 md:-mt-7 px-[25px] relative overflow-x-hidden overflow-y-hidden"
+      className="sm:w-[24.6875rem] w-[100vw] h-[100vh] flex flex-col md:justify-center pt-[4.375rem] md:pt-0 md:-mt-7 px-[1.5625rem] relative overflow-x-hidden overflow-y-hidden"
       style={{
         backgroundColor: isOpen ? "#FFFFFF" : "#FFFEFA",
       }}
     >
-      <div className="flex flex-col items-center gap-[9px]">
+      <div className="flex flex-col items-center gap-[.5625rem]">
         <div
-          className="text-[22px] flex flex-col"
+          className="text-[1.375rem] flex flex-col"
           style={{
             textAlign: isOpen ? "left" : "center",
-            marginBottom: isOpen ? "7px" : "20px",
-            marginLeft: isOpen ? "-180px" : 0,
+            marginBottom: isOpen ? ".4375rem" : "1.25rem",
+            marginLeft: isOpen ? "-11.25rem" : 0,
           }}
         >
           <span>
             내 손 안의 작은 <br />
             반려 고양이, <span className="font-semibold">리티</span>
           </span>
-          <span className="text-[#8242D4] z-10 relative text-[18px] mt-3">
+          <span className="text-[#8242D4] z-10 relative text-[1.125rem] mt-3">
             12,300명이 리티 입양중
           </span>
         </div>
 
         <section className="w-full">
-          <div className="flex flex-row justify-evenly w-full z-10 relative mb-[10px]">
+          <div className="flex flex-row justify-evenly w-full z-10 relative mb-[.625rem]">
             <div className="flex flex-col gap-1">
               <input
-                className="bg-[#ffffff] border-[#f2f2f2] shadow border-[1px] p-3 rounded-[10px] w-[230px] h-[50px]"
+                className="bg-[#ffffff] border-[#f2f2f2] shadow border-[.0625rem] p-3 rounded-[.625rem] w-[14.375rem] h-[3.125rem]"
                 placeholder="Email"
               />
-              <span className="text-[13px] text-[#666666] ml-1 mb-1">
+              <span className="text-[.8125rem] text-[#666666] ml-1 mb-1">
                 *이메일을 입력하고 앱 출시 소식을 받아보세요!
               </span>
             </div>
@@ -89,7 +104,7 @@ function App() {
             <motion.div whileTap={{ scale: 0.9 }}>
               <button
                 onClick={() => setIsEmailModalOpen(true)}
-                className="bg-[#8242D4] rounded-[10px] text-[#ffffff] px-[10px] font-semibold h-[50px] whitespace-nowrap"
+                className="bg-[#8242D4] rounded-[.625rem] text-[#ffffff] px-[.625rem] font-semibold h-[3.125rem] whitespace-nowrap"
               >
                 입양하기
               </button>
@@ -108,41 +123,41 @@ function App() {
               src={Grad}
               width={400}
               height={420}
-              className="absolute md:top-[250px] top-[120px] left-0 flex sm:w-400 h-600 w-full sm:h-420 overflow-hidden"
+              className="absolute md:top-[15.625rem] top-[7.5rem] left-0 flex sm:w-400 h-600 w-full sm:h-420 overflow-hidden"
             ></img>
           )}
         </motion.div>
-        <motion.div layout style={{ height: isOpen ? "330px" : "0px" }}>
-          <section className="flex flex-col h-full bg-[#f1f1f1] w-[345px] rounded-[20px]">
-            <div className="h-[330px] w-full overflow-y-auto px-2.5 py-3 ">
+        <motion.div layout style={{ height: isOpen ? "20.625rem" : "0rem" }}>
+          <section className="flex flex-col h-full bg-[#f1f1f1] w-[21.5625rem] rounded-[1.25rem]">
+            <div className="h-[20.625rem] w-full overflow-y-auto px-2.5 py-3 ">
               {isOpen && (
-                <div className="inline-block max-w-[300px] text-sm relative mx-0 my-[5px] bg-[#ffffff] float-left clear-both text-[#8f00fe] px-[15px] py-[7px] rounded-[14px_14px_14px_0]">
+                <div className="inline-block max-w-[18.75rem] text-sm relative mx-0 my-[.3125rem] bg-[#ffffff] float-left clear-both text-[#8f00fe] px-[.9375rem] py-[.4375rem] rounded-[.875rem_.875rem_.875rem_0]">
                   안녕하냥🐾 나는 리티다냥! 너는 이름이 뭐냥?🐱
                 </div>
               )}
 
               {msgList.length > 0 &&
                 msgList.map((msgEl, idx) =>
-                  msgEl.split(":")[0] === "me" ? (
+                  msgEl.id === "user" ? (
                     <div
                       key={idx}
-                      className="inline-block max-w-[300px] text-sm relative mx-0 my-[5px] bg-[#8f00fe] float-right clear-both text-white px-[15px] py-[7px] rounded-[14px_14px_0_14px]"
+                      className="inline-block max-w-[18.75rem] text-sm relative mx-0 my-[.3125rem] bg-[#8f00fe] float-right clear-both text-white px-[.9375rem] py-[.4375rem] rounded-[.875rem_.875rem_0_.875rem]"
                     >
-                      {msgEl.split(":")[1]}
+                      {msgEl.content}
                     </div>
                   ) : (
                     <div
                       key={idx}
-                      className="inline-block max-w-[300px] text-sm relative mx-0 my-[5px] bg-[#ffffff] float-left clear-both text-[#8f00fe] px-[15px] py-[7px] rounded-[14px_14px_14px_0]"
+                      className="inline-block max-w-[18.75rem] text-sm relative mx-0 my-[.3125rem] bg-[#ffffff] float-left clear-both text-[#8f00fe] px-[.9375rem] py-[.4375rem] rounded-[.875rem_.875rem_.875rem_0]"
                     >
-                      {msgEl === "cat: loading" ? (
-                        <div className="flex space-x-1 justify-center items-center bg-white p-[5px] ">
-                          <div className="h-[5px] w-[5px] bg-[#a8a8a8] rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-                          <div className="h-[5px] w-[5px] bg-[#a8a8a8] rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-                          <div className="h-[5px] w-[5px] bg-[#a8a8a8] rounded-full animate-bounce"></div>
+                      {msgEl.action === "loading" ? (
+                        <div className="flex space-x-1 justify-center items-center bg-white p-[.3125rem] ">
+                          <div className="h-[.3125rem] w-[.3125rem] bg-[#a8a8a8] rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                          <div className="h-[.3125rem] w-[.3125rem] bg-[#a8a8a8] rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                          <div className="h-[.3125rem] w-[.3125rem] bg-[#a8a8a8] rounded-full animate-bounce"></div>
                         </div>
                       ) : (
-                        msgEl.split(":")[1]
+                        msgEl.content
                       )}
                     </div>
                   )
@@ -152,10 +167,10 @@ function App() {
             <motion.div whileTap={{ scale: 0.97 }}>
               <div
                 onClick={() => setIsOpen(true)}
-                className="flex relative justify-between items-center w-full h-20 p-[4px]  "
+                className="flex relative justify-between items-center w-full h-20 p-[.25rem]  "
               >
                 <textarea
-                  className="w-full h-[50px] resize-none rounded-[30px] py-[10px] pl-[22px] pr-[32px] border-[#E8E8E8] border-[1px]"
+                  className="w-full h-[3.125rem] resize-none rounded-[1.875rem] py-[.625rem] pl-[1.375rem] pr-[2rem] border-[#E8E8E8] border-[.0625rem]"
                   placeholder="심심한 고양이 리티에게 말을 걸어보세요!"
                   value={text}
                   text={text}
