@@ -5,6 +5,7 @@ import Cat from "./assets/cat.png";
 import Grad from "./assets/background.svg";
 import Modal from "./components/Modal";
 import axios from "axios";
+import T from "./utils/switchLang";
 
 function App() {
   const [msgList, setMsgList] = useState([]);
@@ -13,6 +14,13 @@ function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
   const [count, setCount] = useState(0);
+
+  // const location = useLocation();
+  console.log(window.location.href);
+  const splitUrl = window.location.href.split("/");
+  const isLangEng = Number(splitUrl[splitUrl.length - 1] === "en");
+  console.log(isLangEng);
+  console.log(T.AdoptedMsg[isLangEng]);
 
   function sendMyText() {
     const newMessage = {
@@ -25,7 +33,7 @@ function App() {
       sendMsgToServer([...msgList, newMessage]);
       setText("");
     } else {
-      alert("메시지를 입력하세요...");
+      alert(T.EnterEmail[isLangEng]);
     }
   }
 
@@ -66,49 +74,50 @@ function App() {
 
   return (
     <main
-      className="sm:w-[24.6875rem] w-[100vw] h-[100vh] flex flex-col md:justify-center pt-[4.375rem] md:pt-0 md:-mt-7 px-[1.5625rem] relative overflow-x-hidden overflow-y-hidden"
+      className="sm:w-[24.6875rem] w-[100vw] h-[100vh] flex flex-col md:justify-center pt-[4.375rem] md:pt-0 md:-mt-7 px-[1.5rem] relative overflow-x-hidden overflow-y-hidden"
       style={{
         backgroundColor: isOpen ? "#FFFFFF" : "#FFFEFA",
       }}
     >
-      <div className="flex flex-col items-center gap-[.5625rem]">
+      <div className="flex flex-col items-center gap-[.5625rem] w-full">
         <div
-          className="text-[1.375rem] flex flex-col"
+          className="text-[1.375rem] flex flex-col w-full"
           style={{
             textAlign: isOpen ? "left" : "center",
             marginBottom: isOpen ? ".4375rem" : "1.25rem",
-            marginLeft: isOpen ? "-11.25rem" : 0,
+            marginLeft: 5,
           }}
         >
           <span>
-            내 손 안의 작은 <br />
-            반려 고양이, <span className="font-semibold">리티</span>
+            {T.MyLittlePet[isLangEng][0]} <br />
+            {T.MyLittlePet[isLangEng][1]}
+            <span className="font-semibold">{T.Ritty[isLangEng]}</span>
           </span>
-          <span className="text-[#8242D4] z-10 relative text-[1.125rem] mt-3">
-            12,300명이 리티 입양중
+          <span className="text-[#8242D4] z-10 relative text-[1.125rem] mt-2">
+            {T.AdoptedMsg[isLangEng]}
           </span>
         </div>
 
         <section className="w-full">
-          <div className="flex flex-row justify-evenly w-full z-10 relative mb-[.625rem]">
-            <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-[5px] w-full mb-1">
+            <div className="flex flex-row  w-full z-10 relative gap-3">
               <input
-                className="bg-[#ffffff] border-[#f2f2f2] shadow border-[.0625rem] p-3 rounded-[.625rem] w-[14.375rem] h-[3.125rem]"
+                className="bg-[#ffffff] border-[#f2f2f2] shadow border-[.0625rem] p-3 rounded-[.625rem] w-full h-[3.125rem]"
                 placeholder="Email"
               />
-              <span className="text-[.8125rem] text-[#666666] ml-1 mb-1">
-                *이메일을 입력하고 앱 출시 소식을 받아보세요!
-              </span>
+              <motion.div whileTap={{ scale: 0.9 }}>
+                <button
+                  onClick={() => setIsEmailModalOpen(true)}
+                  className="bg-[#8242D4] rounded-[.625rem] text-[#ffffff] px-[0.9rem] font-semibold h-[3.125rem] whitespace-nowrap"
+                >
+                  {T.EnterEmail[isLangEng]}
+                </button>
+              </motion.div>
+              <div />
             </div>
-
-            <motion.div whileTap={{ scale: 0.9 }}>
-              <button
-                onClick={() => setIsEmailModalOpen(true)}
-                className="bg-[#8242D4] rounded-[.625rem] text-[#ffffff] px-[.625rem] font-semibold h-[3.125rem] whitespace-nowrap"
-              >
-                입양하기
-              </button>
-            </motion.div>
+            <span className="text-[.8125rem] text-[#666666] ml-1 mb-1 ">
+              {"*" + T.EnterEmailDesc[isLangEng]}
+            </span>
           </div>
         </section>
         <motion.div whileTap={{ scale: isOpen ? 0.9 : 1 }}>
@@ -132,7 +141,7 @@ function App() {
             <div className="h-[20.625rem] w-full overflow-y-auto px-2.5 py-3 ">
               {isOpen && (
                 <div className="inline-block max-w-[18.75rem] text-sm relative mx-0 my-[.3125rem] bg-[#ffffff] float-left clear-both text-[#8f00fe] px-[.9375rem] py-[.4375rem] rounded-[.875rem_.875rem_.875rem_0]">
-                  안녕하냥🐾 나는 리티다냥! 너는 이름이 뭐냥?🐱
+                  {T.GreetingMsg[isLangEng]}
                 </div>
               )}
 
@@ -171,7 +180,7 @@ function App() {
               >
                 <textarea
                   className="w-full h-[3.125rem] resize-none rounded-[1.875rem] py-[.625rem] pl-[1.375rem] pr-[2rem] border-[#E8E8E8] border-[.0625rem]"
-                  placeholder="심심한 고양이 리티에게 말을 걸어보세요!"
+                  placeholder={T.InputPlaceholder[isLangEng]}
                   value={text}
                   text={text}
                   onChange={(e) => {
@@ -193,17 +202,17 @@ function App() {
       </div>
       <Modal
         isOpen={isModalOpen}
-        title={"야옹이의 간택을 받으셨습니다!"}
-        description={"너 좀 내 취향인데? 나의 집사가 돼라 냥~"}
+        title={T.EndModalText.title[isLangEng]}
+        description={T.EndModalText.desc[isLangEng]}
         onClose={() => setIsModalOpen(false)}
-        buttonText="입양하러 가기"
+        buttonText={T.EndModalText.btnText[isLangEng]}
       ></Modal>
       <Modal
         isOpen={isEmailModalOpen}
-        title={"감사합니다 🐾"}
-        description={`해당 이메일 주소로 앱 출시 안내 메일을 보내드릴게요!`}
+        title={T.EmailSubmitModalText.title[isLangEng]}
+        description={T.EmailSubmitModalText.desc[isLangEng]}
         onClose={() => setIsEmailModalOpen(false)}
-        buttonText="닫기"
+        buttonText={T.EmailSubmitModalText.btnText[isLangEng]}
       ></Modal>
     </main>
   );
