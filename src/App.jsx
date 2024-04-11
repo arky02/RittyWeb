@@ -114,7 +114,7 @@ function App() {
             <div className="h-[330px] w-full overflow-y-auto px-2.5 py-3 ">
               {isOpen && (
                 <div className="inline-block max-w-[300px] text-sm relative mx-0 my-[5px] bg-[#ffffff] float-left clear-both text-[#8f00fe] px-[15px] py-[7px] rounded-[14px_14px_14px_0]">
-                  안녕! 나는 삼냥이야
+                  안녕하냥🐾 나는 리티다냥! 너는 이름이 뭐냥?🐱
                 </div>
               )}
 
