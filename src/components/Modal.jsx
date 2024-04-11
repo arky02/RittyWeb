@@ -21,7 +21,7 @@ function Modal({
         ></div>
         <div className="z-[100px]  fixed left-1/2 top-1/2 z-[100] flex h-[220px] w-[335px] -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center gap-[15px] rounded-[15px] bg-white shadow-main">
           <span className="text-zinc-800 text-[22px] font-bold ">{title}</span>
-          <span className="text-[#898989]">{description}</span>
+          <p className="text-[#898989] w-[260px]">{description}</p>
 
           <button
             className={`w-[280px] h-[50px] bg-[#8242D4] text-white rounded-[30px] font-bold mt-[10px]`}

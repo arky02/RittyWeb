@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import "./App.css";
 import Send from "./assets/send.svg";
 import Cat from "./assets/cat.png";
 import Grad from "./assets/background.svg";
@@ -12,6 +11,7 @@ function App() {
   const [text, setText] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
   const [count, setCount] = useState(0);
 
   function sendMyText() {
@@ -51,7 +51,7 @@ function App() {
 
   return (
     <main
-      className="sm:w-[395px] w-[100vw] h-[100vh] flex flex-col md:justify-center  md:-mt-[20px] mt-[10px] p-[25px] relative overflow-x-hidden overflow-y-hidden"
+      className="sm:w-[395px] w-[100vw] h-[100vh] flex flex-col md:justify-center pt-[70px] md:pt-0 md:-mt-7 px-[25px] relative overflow-x-hidden overflow-y-hidden"
       style={{
         backgroundColor: isOpen ? "#FFFFFF" : "#FFFEFA",
       }}
@@ -75,19 +75,22 @@ function App() {
         </div>
 
         <section className="w-full">
-          <div className="flex flex-row justify-between w-full z-10 relative mb-[10px]">
+          <div className="flex flex-row justify-evenly w-full z-10 relative mb-[10px]">
             <div className="flex flex-col gap-1">
               <input
-                className="bg-[#ffffff] border-[#f2f2f2] shadow border-[1px] p-3 rounded-[10px] w-[250px] h-[50px]"
+                className="bg-[#ffffff] border-[#f2f2f2] shadow border-[1px] p-3 rounded-[10px] w-[230px] h-[50px]"
                 placeholder="Email"
               />
               <span className="text-[13px] text-[#666666] ml-1 mb-1">
-                * 이메일을 입력하고 앱 출시 소식을 받아보세요!
+                *이메일을 입력하고 앱 출시 소식을 받아보세요!
               </span>
             </div>
 
             <motion.div whileTap={{ scale: 0.9 }}>
-              <button className="bg-[#8242D4] rounded-[10px] text-[#ffffff] p-[13px] font-semibold ">
+              <button
+                onClick={() => setIsEmailModalOpen(true)}
+                className="bg-[#8242D4] rounded-[10px] text-[#ffffff] px-[10px] font-semibold h-[50px] whitespace-nowrap"
+              >
                 입양하기
               </button>
             </motion.div>
@@ -105,7 +108,7 @@ function App() {
               src={Grad}
               width={400}
               height={420}
-              className="absolute top-[120px] left-0 flex sm:w-400 h-600 w-full sm:h-420 overflow-hidden"
+              className="absolute md:top-[250px] top-[120px] left-0 flex sm:w-400 h-600 w-full sm:h-420 overflow-hidden"
             ></img>
           )}
         </motion.div>
@@ -179,6 +182,13 @@ function App() {
         description={"너 좀 내 취향인데? 나의 집사가 돼라 냥~"}
         onClose={() => setIsModalOpen(false)}
         buttonText="입양하러 가기"
+      ></Modal>
+      <Modal
+        isOpen={isEmailModalOpen}
+        title={"감사합니다 🐾"}
+        description={`해당 이메일 주소로 앱 출시 안내 메일을 보내드릴게요!`}
+        onClose={() => setIsEmailModalOpen(false)}
+        buttonText="닫기"
       ></Modal>
     </main>
   );
