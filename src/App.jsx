@@ -18,7 +18,7 @@ function App() {
   // const location = useLocation();
   console.log(window.location.href);
   const splitUrl = window.location.href.split("/");
-  const isLangEng = Number(splitUrl[splitUrl.length - 1] === "en");
+  const isLangEng = Number(splitUrl[splitUrl.length - 1] === "?lang=en");
   console.log(isLangEng);
   console.log(T.AdoptedMsg[isLangEng]);
 
@@ -54,13 +54,13 @@ function App() {
     const loadingMsg = {
       id: "ritty",
       action: "loading",
-      content: "loading",
+      content: "",
     };
 
     setMsgList((prev) => [...prev, loadingMsg]);
 
     const response = await axios.post(`https://sam-meows.com/api/meow`, {
-      message: messageList,
+      message: messageList.filter((el) => el.action !== "loading"),
     });
 
     setMsgList((prev) => [
