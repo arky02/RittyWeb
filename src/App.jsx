@@ -57,17 +57,23 @@ function App() {
       }}
     >
       <div className="flex flex-col items-center gap-[9px]">
-        <h2
-          className="text-[22px] "
+        <div
+          className="text-[22px] flex flex-col"
           style={{
             textAlign: isOpen ? "left" : "center",
-            marginBottom: isOpen ? "7px" : "40px",
+            marginBottom: isOpen ? "7px" : "20px",
             marginLeft: isOpen ? "-180px" : 0,
           }}
         >
-          내 손 안의 작은 <p></p>
-          반려 고양이, <span className="font-semibold">리티</span>
-        </h2>
+          <span>
+            내 손 안의 작은 <br />
+            반려 고양이, <span className="font-semibold">리티</span>
+          </span>
+          <span className="text-[#8242D4] z-10 relative text-[18px] mt-3">
+            12,300명이 리티 입양중
+          </span>
+        </div>
+
         <section className="w-full">
           <div className="flex flex-row justify-between w-full z-10 relative mb-[10px]">
             <div className="flex flex-col gap-1">
@@ -147,7 +153,7 @@ function App() {
               >
                 <textarea
                   className="w-full h-[50px] resize-none rounded-[30px] py-[10px] pl-[22px] pr-[32px] border-[#E8E8E8] border-[1px]"
-                  placeholder="심심한 고양이 리티에게 말을 걸어보세요 !"
+                  placeholder="심심한 고양이 리티에게 말을 걸어보세요!"
                   value={text}
                   text={text}
                   onChange={(e) => {
