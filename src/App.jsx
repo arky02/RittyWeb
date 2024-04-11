@@ -56,27 +56,32 @@ function App() {
         backgroundColor: isOpen ? "#FFFFFF" : "#FFFEFA",
       }}
     >
-      <div className="flex flex-col items-center gap-[12px]">
+      <div className="flex flex-col items-center gap-[9px]">
         <h2
           className="text-[22px] "
           style={{
             textAlign: isOpen ? "left" : "center",
-            marginBottom: isOpen ? "0" : "70px",
+            marginBottom: isOpen ? "7px" : "40px",
             marginLeft: isOpen ? "-180px" : 0,
           }}
         >
-          현재 <span className="font-semibold">12,903명</span>이 <p></p>
-          <span>야옹이 입양중</span>
+          내 손 안의 작은 <p></p>
+          반려 고양이, <span className="font-semibold">리티</span>
         </h2>
         <section className="w-full">
           <div className="flex flex-row justify-between w-full z-10 relative mb-[10px]">
-            <input
-              className="bg-[#ffffff] border-[#f2f2f2] shadow border-[1px] p-3 rounded-[10px] w-[250px]"
-              placeholder="Email"
-            />
+            <div className="flex flex-col gap-1">
+              <input
+                className="bg-[#ffffff] border-[#f2f2f2] shadow border-[1px] p-3 rounded-[10px] w-[250px] h-[50px]"
+                placeholder="Email"
+              />
+              <span className="text-[13px] text-[#666666] ml-1 mb-1">
+                * 이메일을 입력하고 앱 출시 소식을 받아보세요!
+              </span>
+            </div>
 
             <motion.div whileTap={{ scale: 0.9 }}>
-              <button className="bg-[#8242D4] rounded-[10px] text-[#ffffff] p-[14px] font-semibold">
+              <button className="bg-[#8242D4] rounded-[10px] text-[#ffffff] p-[13px] font-semibold ">
                 입양하기
               </button>
             </motion.div>
@@ -138,11 +143,11 @@ function App() {
             <motion.div whileTap={{ scale: 0.97 }}>
               <div
                 onClick={() => setIsOpen(true)}
-                className="flex relative justify-between items-center w-full h-20 p-[6px]  "
+                className="flex relative justify-between items-center w-full h-20 p-[4px]  "
               >
                 <textarea
                   className="w-full h-[50px] resize-none rounded-[30px] py-[10px] pl-[22px] pr-[32px] border-[#E8E8E8] border-[1px]"
-                  placeholder="메시지를 입력하세요..."
+                  placeholder="심심한 고양이 리티에게 말을 걸어보세요 !"
                   value={text}
                   text={text}
                   onChange={(e) => {
@@ -152,7 +157,7 @@ function App() {
                 ></textarea>
                 <button
                   id="send"
-                  className="absolute right-4 bg-transparent cursor-pointer border-[none]"
+                  className="absolute right-3 bg-transparent cursor-pointer border-[none]"
                   onClick={sendMyText}
                 >
                   <img src={Send} width="34" height="34" />
