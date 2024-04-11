@@ -19,12 +19,12 @@ function Modal({
           className="fixed left-0 top-0 z-10 size-full bg-[rgba(0,0,0,0.2)]"
           onClick={onClose}
         ></div>
-        <div className="z-[100px]  fixed left-1/2 top-1/2 z-[100] flex h-[220px] w-[440px] -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center gap-[15px] rounded-[15px] bg-white shadow-main">
+        <div className="z-[100px]  fixed left-1/2 top-1/2 z-[100] flex h-[220px] w-[335px] -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center gap-[15px] rounded-[15px] bg-white shadow-main">
           <span className="text-zinc-800 text-[22px] font-bold ">{title}</span>
           <span className="text-[#898989]">{description}</span>
 
           <button
-            className={`w-[320px] h-[50px] bg-[#8242D4] text-white rounded-[30px] font-bold mt-[10px]`}
+            className={`w-[280px] h-[50px] bg-[#8242D4] text-white rounded-[30px] font-bold mt-[10px]`}
             onClick={onClose}
           >
             {buttonText}

@@ -51,7 +51,7 @@ function App() {
 
   return (
     <main
-      className="w-[395px] h-[100vh] flex flex-col md:justify-center  md:-mt-[20px] mt-[10px] p-[25px] relative overflow-x-hidden"
+      className="sm:w-[395px] w-[100vw] h-[100vh] flex flex-col md:justify-center  md:-mt-[20px] mt-[10px] p-[25px] relative overflow-x-hidden overflow-y-hidden"
       style={{
         backgroundColor: isOpen ? "#FFFFFF" : "#FFFEFA",
       }}
@@ -87,14 +87,14 @@ function App() {
             src={Cat}
             width={isOpen ? 199 : 209}
             height={isOpen ? 208 : 218}
-            className="relative z-10"
+            className="relative z-10 "
           ></img>
           {isOpen || (
             <img
               src={Grad}
               width={400}
               height={420}
-              className="absolute top-[170px] left-0 flex "
+              className="absolute top-[120px] left-0 flex sm:w-400 h-600 w-full sm:h-420 overflow-hidden"
             ></img>
           )}
         </motion.div>
