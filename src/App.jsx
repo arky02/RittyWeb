@@ -74,7 +74,7 @@ function App() {
     console.log(msgList);
 
     if (response.status === 200) setCount((prev) => (prev += 1));
-    if (count >= 7) {
+    if (count >= 15) {
       setIsModalOpen(true);
       saveUuidCookie();
     }
