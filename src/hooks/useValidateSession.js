@@ -7,7 +7,7 @@ export const useValidateSession = () => {
   const saveUuidCookie = () => {
     const validateTime = 3600; //1시간
     const expiration = new Date(Date.now() + validateTime * 1000);
-    setCookie("userAccessToken", uuidv4(), {
+    setCookie("userUuid", uuidv4(), {
       secure: false,
       sameSite: "lax",
       path: "/",

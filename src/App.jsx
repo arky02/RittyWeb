@@ -6,7 +6,7 @@ import Grad from "./assets/background.svg";
 import Modal from "./components/Modal";
 import axios from "axios";
 import T from "./utils/switchLang";
-import { useValidateSession } from "./utils/useValidateSession";
+import { useValidateSession } from "./hooks/useValidateSession";
 
 function App() {
   const [msgList, setMsgList] = useState([]);
@@ -74,7 +74,7 @@ function App() {
     console.log(msgList);
 
     if (response.status === 200) setCount((prev) => (prev += 1));
-    if (count >= 15) {
+    if (count >= 7) {
       setIsModalOpen(true);
       saveUuidCookie();
     }
