@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Send from "./assets/send.svg";
 import Cat from "./assets/cat.png";
@@ -6,6 +6,7 @@ import Grad from "./assets/background.svg";
 import Modal from "./components/Modal";
 import axios from "axios";
 import T from "./utils/switchLang";
+import { useValidateSession } from "./utils/useValidateSession";
 
 function App() {
   const [msgList, setMsgList] = useState([]);
@@ -15,12 +16,14 @@ function App() {
   const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
   const [count, setCount] = useState(0);
 
-  // const location = useLocation();
-  console.log(window.location.href);
+  const { saveUuidCookie, isSessionValid } = useValidateSession();
+
   const splitUrl = window.location.href.split("/");
   const isLangEng = Number(splitUrl[splitUrl.length - 1] === "?lang=en");
-  console.log(isLangEng);
-  console.log(T.AdoptedMsg[isLangEng]);
+
+  useEffect(() => {
+    if (!isSessionValid()) setIsModalOpen(true);
+  }, []);
 
   function sendMyText() {
     const newMessage = {
@@ -63,13 +66,18 @@ function App() {
       message: messageList.filter((el) => el.action !== "loading"),
     });
 
+    console.log(response);
     setMsgList((prev) => [
       ...prev.filter((el) => el.action !== "loading"),
-      response.data.message,
+      response.data,
     ]);
+    console.log(msgList);
 
     if (response.status === 200) setCount((prev) => (prev += 1));
-    if (count >= 10) setIsModalOpen(true);
+    if (count >= 15) {
+      setIsModalOpen(true);
+      saveUuidCookie();
+    }
   }
 
   return (
@@ -147,7 +155,7 @@ function App() {
 
               {msgList.length > 0 &&
                 msgList.map((msgEl, idx) =>
-                  msgEl.id === "user" ? (
+                  msgEl?.id === "user" ? (
                     <div
                       key={idx}
                       className="inline-block max-w-[18.75rem] text-sm relative mx-0 my-[.3125rem] bg-[#8f00fe] float-right clear-both text-white px-[.9375rem] py-[.4375rem] rounded-[.875rem_.875rem_0_.875rem]"
@@ -159,14 +167,14 @@ function App() {
                       key={idx}
                       className="inline-block max-w-[18.75rem] text-sm relative mx-0 my-[.3125rem] bg-[#ffffff] float-left clear-both text-[#8f00fe] px-[.9375rem] py-[.4375rem] rounded-[.875rem_.875rem_.875rem_0]"
                     >
-                      {msgEl.action === "loading" ? (
+                      {msgEl?.action === "loading" ? (
                         <div className="flex space-x-1 justify-center items-center bg-white p-[.3125rem] ">
                           <div className="h-[.3125rem] w-[.3125rem] bg-[#a8a8a8] rounded-full animate-bounce [animation-delay:-0.3s]"></div>
                           <div className="h-[.3125rem] w-[.3125rem] bg-[#a8a8a8] rounded-full animate-bounce [animation-delay:-0.15s]"></div>
                           <div className="h-[.3125rem] w-[.3125rem] bg-[#a8a8a8] rounded-full animate-bounce"></div>
                         </div>
                       ) : (
-                        msgEl.content
+                        msgEl?.content
                       )}
                     </div>
                   )
@@ -204,7 +212,7 @@ function App() {
         isOpen={isModalOpen}
         title={T.EndModalText.title[isLangEng]}
         description={T.EndModalText.desc[isLangEng]}
-        onClose={() => setIsModalOpen(false)}
+        onClose={() => {}}
         buttonText={T.EndModalText.btnText[isLangEng]}
       ></Modal>
       <Modal
