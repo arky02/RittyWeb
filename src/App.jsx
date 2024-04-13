@@ -82,9 +82,10 @@ function App() {
 
   return (
     <main
-      className="sm:w-[24.6875rem] w-[100vw] h-[100vh] flex flex-col md:justify-center pt-[4.375rem] md:pt-0 md:-mt-7 px-[1.5rem] relative overflow-x-hidden overflow-y-hidden"
+      className="sm:w-[24.6875rem] w-[100vw] h-[100vh] flex flex-col md:justify-center pt-[4.375rem] md:pt-0 md:-mt-7 px-[1.5rem] relative overflow-x-hidden pb-[30px]"
       style={{
         backgroundColor: isOpen ? "#FFFFFF" : "#FFFEFA",
+        overflowY: isOpen ? "auto" : "hidden",
       }}
     >
       <div className="flex flex-col items-center gap-[.5625rem] w-full">
@@ -184,7 +185,7 @@ function App() {
             <motion.div whileTap={{ scale: 0.97 }}>
               <div
                 onClick={() => setIsOpen(true)}
-                className="flex relative justify-between items-center w-full h-20 p-[.25rem]  "
+                className="flex relative justify-between items-center w-full h-20 p-[.25rem]"
               >
                 <textarea
                   className="w-full h-[3.125rem] resize-none rounded-[1.875rem] py-[.625rem] pl-[1.375rem] pr-[2rem] border-[#E8E8E8] border-[.0625rem]"
