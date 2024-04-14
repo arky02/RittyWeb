@@ -1,11 +1,14 @@
 const T = {
   EnterMsg: ["메시지를 입력하세요", " Enter Message"],
   MyLittlePet: [
-    ["내 손 안의 작은", "반려 고양이,"],
+    ["내 손 안의 작은", "반려 고양이, "],
     ["A little cat in", "my hand, "],
   ],
   Ritty: ["리티", "Ritty"],
-  AdoptedMsg: ["12,300명이 리티 입양중", "12,300 people is adopting Ritty!"],
+  AdoptedMsg: [
+    ["현재 ", "명이 리티 입양중"],
+    ["", "people is adopting Ritty!"],
+  ],
   EnterEmailDesc: [
     "이메일을 입력하고 앱 출시 소식을 받아보세요!",
     "Enter email and get app launch news!",
@@ -18,6 +21,10 @@ const T = {
   InputPlaceholder: [
     "심심한 고양이 리티에게 말을 걸어보세요!",
     "Talk to a bored cat, Ritty!",
+  ],
+  BlockedInputPlaceholder: [
+    "앱 출시를 기다려주세요!",
+    "Please wait for the app launch!",
   ],
   EndModalText: {
     title: ["야옹이의 간택을 받으셨습니다!", "You've been chosen by meow!"],
