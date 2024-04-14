@@ -67,15 +67,13 @@ function App() {
       message: messageList.filter((el) => el.action !== "loading"),
     });
 
-    console.log(response);
     setMsgList((prev) => [
       ...prev.filter((el) => el.action !== "loading"),
       response.data,
     ]);
-    console.log(msgList);
 
     if (response.status === 200) setCount((prev) => (prev += 1));
-    if (count >= 3) {
+    if (count >= 7) {
       setIsModalOpen(true);
       saveUuidCookie();
     }
@@ -92,8 +90,6 @@ function App() {
       const response = await axios.post(`https://sam-meows.com/api/log/email`, {
         email: emailTxt,
       });
-
-      console.log(response);
 
       if (response.status === 200) setIsEmailSubmitted(true);
 
