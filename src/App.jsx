@@ -176,6 +176,7 @@ function App() {
             width={isOpen ? 199 : 209}
             height={isOpen ? 208 : 218}
             className="relative z-10 "
+            draggable={false}
           ></img>
           {/* {isOpen || (
             <img
