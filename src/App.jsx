@@ -18,6 +18,7 @@ function App() {
   const [isEmailSubmitted, setIsEmailSubmitted] = useState(false);
   const [emailTxt, setEmailTxt] = useState("");
   const { saveUuidCookie, isSessionValid } = useValidateSession();
+  const [isChatValid, setIsChatValid] = useState(true);
 
   const splitUrl = window.location.href.split("/");
   const isLangEng = Number(splitUrl[splitUrl.length - 1] === "?lang=en");
@@ -32,12 +33,13 @@ function App() {
       action: "none",
       content: text,
     };
-    if (text) {
+    if (text !== "") {
       setMsgList((prev) => [...prev, newMessage]);
       sendMsgToServer([...msgList, newMessage]);
       setText("");
     } else {
-      alert(T.EnterEmail[isLangEng]);
+      alert(T.EnterMsg[isLangEng]);
+      return;
     }
   }
 
@@ -48,9 +50,15 @@ function App() {
       content: text,
     };
     if (e.target.value.includes("\n")) {
-      setMsgList((prev) => [...prev, newMessage]);
-      sendMsgToServer([...msgList, newMessage]);
-      setText("");
+      if (text !== "") {
+        setMsgList((prev) => [...prev, newMessage]);
+        sendMsgToServer([...msgList, newMessage]);
+        setText("");
+      } else {
+        alert(T.EnterMsg[isLangEng]);
+        setText("");
+        return;
+      }
     }
   }
 
@@ -63,6 +71,8 @@ function App() {
 
     setMsgList((prev) => [...prev, loadingMsg]);
 
+    setIsChatValid(false);
+
     const response = await axios.post(`https://sam-meows.com/api/meow`, {
       message: messageList.filter((el) => el.action !== "loading"),
     });
@@ -71,6 +81,8 @@ function App() {
       ...prev.filter((el) => el.action !== "loading"),
       response.data,
     ]);
+
+    setIsChatValid(true);
 
     if (response.status === 200) setCount((prev) => (prev += 1));
     if (count >= 7) {
@@ -161,7 +173,7 @@ function App() {
               </motion.div>
               <div />
             </div>
-            <span className="text-[.8125rem] text-[#666666] ml-1 mb-1 ">
+            <span className="text-[.8125rem] text-[#666666] ml-1 mb-1 font-light">
               {"*" + T.EnterEmailDesc[isLangEng]}
             </span>
           </div>
@@ -223,7 +235,7 @@ function App() {
             <motion.div whileTap={{ scale: 0.97 }}>
               <div
                 onClick={() => setIsOpen(true)}
-                className="flex relative justify-between items-center w-full h-20 p-[.25rem]"
+                className="flex relative justify-between items-center w-full h-20 p-[0.4rem]"
               >
                 <textarea
                   className="w-full h-[3.125rem] resize-none rounded-[1.875rem] py-[.625rem] pl-[1.375rem] pr-[2rem] border-[#E8E8E8] border-[.0625rem]"
@@ -232,7 +244,7 @@ function App() {
                       ? T.BlockedInputPlaceholder[isLangEng]
                       : T.InputPlaceholder[isLangEng]
                   }
-                  disabled={!isSessionValid()}
+                  disabled={!isSessionValid() || !isChatValid}
                   value={text}
                   text={text}
                   onChange={(e) => {
@@ -242,9 +254,9 @@ function App() {
                 ></textarea>
                 <button
                   id="send"
-                  className="absolute right-3 bg-transparent cursor-pointer border-[none]"
+                  className="absolute right-3.5 bg-transparent cursor-pointer border-[none]"
                   onClick={sendMyText}
-                  disabled={!isSessionValid()}
+                  disabled={!isSessionValid() || !isChatValid}
                 >
                   <img src={Send} width="34" height="34" />
                 </button>
