@@ -1,17 +1,12 @@
 import { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Send from "./assets/send.svg";
-import Cat from "./assets/cat.png";
-import Grad from "./assets/background.svg";
 import Modal from "./components/Modal";
 import axios from "axios";
 import T from "./utils/switchLang";
 import { useValidateSession } from "./hooks/useValidateSession";
 import { useInterval } from "usehooks-ts";
-import idle1 from "./assets/idle1.png";
-import idle2 from "./assets/idle2.png";
 import useDetectSwipe from "./hooks/useDetectSwipe";
-import bread from "./assets/bread.png";
 
 function App() {
   const [msgList, setMsgList] = useState([]);
@@ -42,7 +37,7 @@ function App() {
   useEffect(() => {
     if (!isSessionValid())
       setCurrImgState({ status: "sleepy", isStatusChanged: true });
-  }, [isSessionValid]);
+  }, []);
 
   useEffect(() => {
     if (isOpen) setCurrImgState({ status: "idle", isStatusChanged: true });
@@ -402,7 +397,10 @@ function App() {
         isOpen={isModalOpen}
         title={T.EndModalText.title[isLangEng]}
         description={T.EndModalText.desc[isLangEng]}
-        onClose={() => setIsModalOpen(false)}
+        onClose={() => {
+          setIsModalOpen(false);
+          window.location.reload();
+        }}
         buttonText={T.EndModalText.btnText[isLangEng]}
       ></Modal>
       <Modal
