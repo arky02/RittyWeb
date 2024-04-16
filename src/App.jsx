@@ -32,6 +32,8 @@ function App() {
   const [currImgName, setCurrImgName] = useState("bread");
   const [userCount, setUserCount] = useState(0);
 
+  console.log(currImgState);
+
   const { onTouchStart, onTouchMove, onTouchEnd, swiped } = useDetectSwipe();
 
   const splitUrl = window.location.href.split("/");
@@ -112,7 +114,10 @@ function App() {
       response.data,
     ]);
 
-    const newImgStatus = response.data.action.toLowerCase();
+    const newImgStatus =
+      response.data.action.toLowerCase() === "none"
+        ? "idle"
+        : response.data.action.toLowerCase();
 
     // change cat's img
     setCurrImgState((prev) => ({
