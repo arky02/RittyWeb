@@ -32,8 +32,6 @@ function App() {
   const [currImgName, setCurrImgName] = useState("bread");
   const [userCount, setUserCount] = useState(0);
 
-  console.log(currImgState);
-
   const { onTouchStart, onTouchMove, onTouchEnd, swiped } = useDetectSwipe();
 
   const splitUrl = window.location.href.split("/");
@@ -128,7 +126,7 @@ function App() {
     if (!(newImgStatus === "idle" || newImgStatus === "bread")) {
       setTimeout(() => {
         setCurrImgState({ status: "idle", isStatusChanged: true });
-      }, 4000);
+      }, 4500);
     }
 
     setIsChatValid(true);
@@ -204,6 +202,7 @@ function App() {
         ? currImgState.status
         : currImgState.status + String(imgIdxState + 1)
     );
+    console.log(currImgName);
   };
 
   useInterval(() => {
