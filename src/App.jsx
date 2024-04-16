@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Send from "./assets/send.svg";
 import Cat from "./assets/cat.png";
@@ -32,6 +32,8 @@ function App() {
   const [currImgName, setCurrImgName] = useState("bread");
   const [userCount, setUserCount] = useState(0);
 
+  const scrollRef = useRef();
+
   const { onTouchStart, onTouchMove, onTouchEnd, swiped } = useDetectSwipe();
 
   const splitUrl = window.location.href.split("/");
@@ -45,6 +47,16 @@ function App() {
   useEffect(() => {
     if (isOpen) setCurrImgState({ status: "idle", isStatusChanged: true });
   }, [isOpen]);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [msgList]);
+
+  const scrollToBottom = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  };
 
   function sendMyText() {
     const newMessage = {
@@ -315,6 +327,7 @@ function App() {
             <div
               className="h-[20.625rem] w-full overflow-y-auto px-2.5"
               style={{ paddingTop: isOpen ? 7 : 0 }}
+              ref={scrollRef}
             >
               {isOpen && (
                 <div className="inline-block max-w-[18.75rem] text-sm relative mx-0 my-[.3125rem] bg-[#ffffff] float-left clear-both text-[#8f00fe] px-[.9375rem] py-[.4375rem] rounded-[.875rem_.875rem_.875rem_0]">
