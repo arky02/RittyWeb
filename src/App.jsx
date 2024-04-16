@@ -202,7 +202,6 @@ function App() {
         ? currImgState.status
         : currImgState.status + String(imgIdxState + 1)
     );
-    console.log(currImgName);
   };
 
   useInterval(() => {
