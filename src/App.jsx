@@ -25,7 +25,10 @@ function App() {
   const { saveUuidCookie, isSessionValid } = useValidateSession();
   const [isChatValid, setIsChatValid] = useState(true);
   const [imgIdxState, setImgIdxState] = useState(1);
-  const [currImgState, setCurrImgState] = useState("bread");
+  const [currImgState, setCurrImgState] = useState({
+    status: "bread",
+    isStatusChanged: false,
+  });
   const [currImgName, setCurrImgName] = useState("bread");
   const [userCount, setUserCount] = useState(0);
 
@@ -34,12 +37,15 @@ function App() {
   const splitUrl = window.location.href.split("/");
   const isLangEng = Number(splitUrl[splitUrl.length - 1] === "?lang=en");
 
+  console.log(currImgState?.status);
+
   useEffect(() => {
-    if (!isSessionValid()) setCurrImgState("sleepy");
+    if (!isSessionValid())
+      setCurrImgState({ status: "sleepy", isStatusChanged: true });
   }, [isSessionValid]);
 
   useEffect(() => {
-    if (isOpen) setCurrImgState("idle");
+    if (isOpen) setCurrImgState({ status: "idle", isStatusChanged: true });
   }, [isOpen]);
 
   function sendMyText() {
@@ -86,21 +92,37 @@ function App() {
       content: "",
     };
 
+    // set loading msg
     setMsgList((prev) => [...prev, loadingMsg]);
 
     setIsChatValid(false);
 
+    // get chat response
     const response = await axios.post(`https://sam-meows.com/api/meow`, {
       message: messageList.filter((el) => el.action !== "loading"),
     });
 
+    // set new msg
     setMsgList((prev) => [
       ...prev.filter((el) => el.action !== "loading"),
       response.data,
     ]);
 
-    setCurrImgState(response.data.action);
-    console.log(response.data.action);
+    const newImgStatus = response.data.action.toLowerCase();
+    console.log(newImgStatus);
+
+    // change cat's img
+    setCurrImgState((prev) => ({
+      status: newImgStatus,
+      isStatusChanged: prev.status === newImgStatus,
+    }));
+
+    if (!(newImgStatus === "idle" || newImgStatus === "bread")) {
+      console.log("cycycy");
+      setTimeout(() => {
+        setCurrImgState({ status: "idle", isStatusChanged: true });
+      }, 4000);
+    }
 
     setIsChatValid(true);
 
@@ -145,10 +167,10 @@ function App() {
   const manageImgStatus = () => {
     let length = 1;
     // eslint-disable-next-line default-case
-    switch (currImgState) {
-      case "golgol":
+    switch (currImgState.status) {
+      case "golgolsong":
       case "idle":
-      case "sad":
+      case "cry":
       case "sleepy":
         length = 2;
         break;
@@ -157,21 +179,22 @@ function App() {
         break;
     }
 
-    setImgIdxState((prev) => (prev + 1) % length);
-    // console.log(imgIdxState);
+    if (currImgState.isStatusChanged) {
+      setImgIdxState(0);
+      setCurrImgState((prev) => ({ ...prev, isStatusChanged: false }));
+    } else {
+      setImgIdxState((prev) => (prev + 1) % length);
+    }
 
     setCurrImgName(
-      length === 1 ? currImgState : currImgState + String(imgIdxState + 1)
+      length === 1
+        ? currImgState.status
+        : currImgState.status + String(imgIdxState + 1)
     );
-
-    currImgState === ("golgol" || "sad" || "wag" || "smile" || "angry") &&
-      setTimeout(() => {
-        setCurrImgState("idle");
-      }, 4000);
   };
 
   useInterval(() => {
-    manageImgStatus(currImgState);
+    manageImgStatus(currImgState.status);
   }, 1000);
 
   // useEffect(() => {
@@ -288,7 +311,7 @@ function App() {
                 </div>
               )}
 
-              {msgList.length > 7 &&
+              {msgList.length > 0 &&
                 msgList.map((msgEl, idx) =>
                   msgEl?.id === "user" ? (
                     <div
@@ -324,7 +347,7 @@ function App() {
               >
                 <textarea
                   className="w-full h-[3.125rem] resize-none rounded-[1.875rem] py-[.625rem] pl-[1.375rem] pr-[2rem] border-[#E8E8E8] border-[.0625rem]"
-                  style={{ marginBottom: isOpen ? 5 : 0 }}
+                  style={{ margin: isOpen ? "5px 0 5px 0" : 0 }}
                   placeholder={
                     !isSessionValid()
                       ? T.BlockedInputPlaceholder[isLangEng]
