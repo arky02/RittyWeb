@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Send from "./assets/send.svg";
 import Cat from "./assets/cat.png";
 import Grad from "./assets/background.svg";
@@ -7,6 +7,11 @@ import Modal from "./components/Modal";
 import axios from "axios";
 import T from "./utils/switchLang";
 import { useValidateSession } from "./hooks/useValidateSession";
+import { useInterval } from "usehooks-ts";
+import idle1 from "./assets/idle1.png";
+import idle2 from "./assets/idle2.png";
+import useDetectSwipe from "./hooks/useDetectSwipe";
+import bread from "./assets/bread.png";
 
 function App() {
   const [msgList, setMsgList] = useState([]);
@@ -19,13 +24,23 @@ function App() {
   const [emailTxt, setEmailTxt] = useState("");
   const { saveUuidCookie, isSessionValid } = useValidateSession();
   const [isChatValid, setIsChatValid] = useState(true);
+  const [imgIdxState, setImgIdxState] = useState(1);
+  const [currImgState, setCurrImgState] = useState("bread");
+  const [currImgName, setCurrImgName] = useState("bread");
+  const [userCount, setUserCount] = useState(0);
+
+  const { onTouchStart, onTouchMove, onTouchEnd, swiped } = useDetectSwipe();
 
   const splitUrl = window.location.href.split("/");
   const isLangEng = Number(splitUrl[splitUrl.length - 1] === "?lang=en");
 
-  // useEffect(() => {
-  //   if (!isSessionValid()) setIsModalOpen(true);
-  // }, []);
+  useEffect(() => {
+    if (!isSessionValid()) setCurrImgState("sleepy");
+  }, [isSessionValid]);
+
+  useEffect(() => {
+    if (isOpen) setCurrImgState("idle");
+  }, [isOpen]);
 
   function sendMyText() {
     const newMessage = {
@@ -33,7 +48,8 @@ function App() {
       action: "none",
       content: text,
     };
-    if (text !== "") {
+    if (text.length > 50) alert("50자 이내로 작성해주세요.");
+    else if (text !== "") {
       setMsgList((prev) => [...prev, newMessage]);
       sendMsgToServer([...msgList, newMessage]);
       setText("");
@@ -50,7 +66,8 @@ function App() {
       content: text,
     };
     if (e.target.value.includes("\n")) {
-      if (text !== "") {
+      if (text.length > 50) alert("50자 이내로 작성해주세요.");
+      else if (text !== "") {
         setMsgList((prev) => [...prev, newMessage]);
         sendMsgToServer([...msgList, newMessage]);
         setText("");
@@ -82,10 +99,14 @@ function App() {
       response.data,
     ]);
 
+    setCurrImgState(response.data.action);
+    console.log(response.data.action);
+
     setIsChatValid(true);
 
     if (response.status === 200) setCount((prev) => (prev += 1));
     if (count >= 7) {
+      // 채팅 횟수 제한
       setIsModalOpen(true);
       saveUuidCookie();
     }
@@ -120,6 +141,47 @@ function App() {
         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       );
   };
+
+  const manageImgStatus = () => {
+    let length = 1;
+    // eslint-disable-next-line default-case
+    switch (currImgState) {
+      case "golgol":
+      case "idle":
+      case "sad":
+      case "sleepy":
+        length = 2;
+        break;
+      case "wag":
+        length = 3;
+        break;
+    }
+
+    setImgIdxState((prev) => (prev + 1) % length);
+    // console.log(imgIdxState);
+
+    setCurrImgName(
+      length === 1 ? currImgState : currImgState + String(imgIdxState + 1)
+    );
+
+    currImgState === ("golgol" || "sad" || "wag" || "smile" || "angry") &&
+      setTimeout(() => {
+        setCurrImgState("idle");
+      }, 4000);
+  };
+
+  useInterval(() => {
+    manageImgStatus(currImgState);
+  }, 1000);
+
+  // useEffect(() => {
+  //   const getUserCount = async () => {
+  //     const response = await axios.get(`https://sam-meows.com/api/log/email`);
+  //     console.log(response.data);
+  //     setUserCount(response.data);
+  //   };
+  //   getUserCount();
+  // }, []);
 
   return (
     <main
@@ -178,15 +240,22 @@ function App() {
             </span>
           </div>
         </section>
-        <motion.div whileTap={{ scale: isOpen ? 0.9 : 1 }}>
-          <img
-            src={Cat}
-            width={isOpen ? 199 : 209}
-            height={isOpen ? 208 : 218}
-            className="relative z-10 "
-            draggable={false}
-          ></img>
-          {/* {isOpen || (
+        <div
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+          className="relative"
+        >
+          <motion.div whileTap={{ scale: isOpen ? 0.9 : 1 }}>
+            <img
+              src={require(`./assets/${currImgName}.png`)}
+              width={isOpen ? 199 : 209}
+              height={isOpen ? 208 : 218}
+              className="relative z-10 "
+              draggable={false}
+              alt="cat ritty"
+            ></img>
+            {/* {isOpen || (
             <img
               src={Grad}
               width={400}
@@ -194,17 +263,32 @@ function App() {
               className="absolute md:top-[15.625rem] top-[7.5rem] left-0 flex sm:w-400 h-600 w-full sm:h-420 overflow-hidden"
             ></img>
           )} */}
-        </motion.div>
-        <motion.div layout style={{ height: isOpen ? "20.625rem" : "0rem" }}>
+          </motion.div>
+          <AnimatePresence>
+            {swiped && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                <span className="absolute top-7 right-[88px]">💓</span>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+        <motion.div layout style={{ height: isOpen ? "20.625rem" : "0" }}>
           <section className="flex flex-col h-full bg-[#f1f1f1] w-[21.5625rem] rounded-[1.25rem]">
-            <div className="h-[20.625rem] w-full overflow-y-auto px-2.5 py-3 ">
+            <div
+              className="h-[20.625rem] w-full overflow-y-auto px-2.5"
+              style={{ paddingTop: isOpen ? 7 : 0 }}
+            >
               {isOpen && (
                 <div className="inline-block max-w-[18.75rem] text-sm relative mx-0 my-[.3125rem] bg-[#ffffff] float-left clear-both text-[#8f00fe] px-[.9375rem] py-[.4375rem] rounded-[.875rem_.875rem_.875rem_0]">
                   {T.GreetingMsg[isLangEng]}
                 </div>
               )}
 
-              {msgList.length > 0 &&
+              {msgList.length > 7 &&
                 msgList.map((msgEl, idx) =>
                   msgEl?.id === "user" ? (
                     <div
@@ -235,10 +319,12 @@ function App() {
             <motion.div whileTap={{ scale: 0.97 }}>
               <div
                 onClick={() => setIsOpen(true)}
-                className="flex relative justify-between items-center w-full h-20 p-[0.4rem]"
+                className="flex relative justify-between items-center w-full p-[0.4rem]"
+                style={{ padding: isOpen ? "0.4rem" : 0 }}
               >
                 <textarea
                   className="w-full h-[3.125rem] resize-none rounded-[1.875rem] py-[.625rem] pl-[1.375rem] pr-[2rem] border-[#E8E8E8] border-[.0625rem]"
+                  style={{ marginBottom: isOpen ? 5 : 0 }}
                   placeholder={
                     !isSessionValid()
                       ? T.BlockedInputPlaceholder[isLangEng]
