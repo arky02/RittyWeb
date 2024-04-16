@@ -115,7 +115,6 @@ function App() {
     ]);
 
     const newImgStatus = response.data.action.toLowerCase();
-    console.log(newImgStatus);
 
     // change cat's img
     setCurrImgState((prev) => ({
@@ -124,7 +123,6 @@ function App() {
     }));
 
     if (!(newImgStatus === "idle" || newImgStatus === "bread")) {
-      console.log("cycycy");
       setTimeout(() => {
         setCurrImgState({ status: "idle", isStatusChanged: true });
       }, 4000);
@@ -171,14 +169,16 @@ function App() {
   };
 
   const manageImgStatus = () => {
-    let length = 1;
+    let length = 2;
+    let isIdleSecondaryStatus = false;
     // eslint-disable-next-line default-case
     switch (currImgState.status) {
-      case "golgolsong":
-      case "idle":
-      case "cry":
-      case "sleepy":
-        length = 2;
+      case "bread":
+        length = 1;
+        break;
+      case "smile":
+      case "angry":
+        isIdleSecondaryStatus = true;
         break;
       case "wag":
         length = 3;
@@ -193,7 +193,11 @@ function App() {
     }
 
     setCurrImgName(
-      length === 1
+      isIdleSecondaryStatus
+        ? imgIdxState
+          ? currImgState.status
+          : "idle1"
+        : length === 1
         ? currImgState.status
         : currImgState.status + String(imgIdxState + 1)
     );
