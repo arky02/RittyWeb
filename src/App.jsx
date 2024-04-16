@@ -144,8 +144,8 @@ function App() {
     setIsChatValid(true);
 
     if (response.status === 200) setCount((prev) => (prev += 1));
-    if (count >= 7) {
-      // 채팅 횟수 제한
+    if (count >= 6) {
+      // 채팅 횟수 제한 7번으로
       setIsModalOpen(true);
       saveUuidCookie();
     }
