@@ -98,9 +98,15 @@ function App() {
     setIsChatValid(false);
 
     // get chat response
-    const response = await axios.post(`https://sam-meows.com/api/meow`, {
-      message: messageList.filter((el) => el.action !== "loading"),
-    });
+    let response = "";
+    try {
+      response = await axios.post(`https://sam-meows.com/api/meow`, {
+        message: messageList.filter((el) => el.action !== "loading"),
+      });
+    } catch {
+      alert("서버 오류가 발생하였습니다. 잠시 후 다시 시도해 주세요.");
+      return;
+    }
 
     // set new msg
     setMsgList((prev) => [
