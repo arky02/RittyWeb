@@ -305,7 +305,7 @@ function App() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
               >
-                <span className="absolute top-7 right-[88px]">💓</span>
+                <span className="absolute top-7 right-[84px]">💓</span>
               </motion.div>
             )}
           </AnimatePresence>
