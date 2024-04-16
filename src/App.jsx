@@ -37,8 +37,6 @@ function App() {
   const splitUrl = window.location.href.split("/");
   const isLangEng = Number(splitUrl[splitUrl.length - 1] === "?lang=en");
 
-  console.log(currImgState?.status);
-
   useEffect(() => {
     if (!isSessionValid())
       setCurrImgState({ status: "sleepy", isStatusChanged: true });
