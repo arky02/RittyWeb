@@ -287,7 +287,7 @@ function App() {
           onTouchEnd={onTouchEnd}
           className="relative"
         >
-          <motion.div whileTap={{ scale: isOpen ? 0.9 : 1 }}>
+          <motion.div whileTap={{ scale: 0.85 }}>
             <img
               src={require(`./assets/${currImgName}.png`)}
               width={isOpen ? 199 : 209}
