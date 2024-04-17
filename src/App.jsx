@@ -243,7 +243,7 @@ function App() {
             {T.MyLittlePet[isLangEng][1]}
             <span className="font-semibold">{T.Ritty[isLangEng]}</span>
           </span>
-          <span className="text-[#8242D4] z-10 relative text-[1.125rem] mt-2">
+          <span className="text-[#FB8A59] z-10 relative text-[1.125rem] mt-2">
             {T.AdoptedMsg[isLangEng][0]}
             <span className="font-semibold">{"12,300"}</span>
             {T.AdoptedMsg[isLangEng][1]}
@@ -262,10 +262,10 @@ function App() {
               <motion.div whileTap={{ scale: 0.9 }}>
                 <button
                   onClick={sendEmailToServer}
-                  className="bg-[#8242D4] rounded-[.625rem] text-[#ffffff] px-[0.9rem] font-semibold h-[3.125rem] whitespace-nowrap"
+                  className="bg-[#FB8A59] rounded-[.625rem] text-[#ffffff] px-[0.9rem] font-semibold h-[3.125rem] whitespace-nowrap"
                   disabled={isEmailSubmitted}
                   style={{
-                    backgroundColor: isEmailSubmitted ? "#ccadf5" : "#8242D4",
+                    backgroundColor: isEmailSubmitted ? "#ccadf5" : "#FB8A59",
                   }}
                 >
                   {T.EnterEmail[isLangEng]}
@@ -322,7 +322,7 @@ function App() {
               ref={scrollRef}
             >
               {isOpen && (
-                <div className="inline-block max-w-[18.75rem] text-sm relative mx-0 my-[.3125rem] bg-[#ffffff] float-left clear-both text-[#8f00fe] px-[.9375rem] py-[.4375rem] rounded-[.875rem_.875rem_.875rem_0]">
+                <div className="inline-block max-w-[18.75rem] text-sm relative mx-0 my-[.3125rem] bg-[#ffffff] float-left clear-both text-[#000000] px-[.9375rem] py-[.4375rem] rounded-[.875rem_.875rem_.875rem_0]">
                   {T.GreetingMsg[isLangEng]}
                 </div>
               )}
@@ -332,14 +332,14 @@ function App() {
                   msgEl?.id === "user" ? (
                     <div
                       key={idx}
-                      className="inline-block max-w-[18.75rem] text-sm relative mx-0 my-[.3125rem] bg-[#8f00fe] float-right clear-both text-white px-[.9375rem] py-[.4375rem] rounded-[.875rem_.875rem_0_.875rem]"
+                      className="inline-block max-w-[18.75rem] text-sm relative mx-0 my-[.3125rem] bg-[#FB8A59] float-right clear-both text-white px-[.9375rem] py-[.4375rem] rounded-[.875rem_.875rem_0_.875rem]"
                     >
                       {msgEl.content}
                     </div>
                   ) : (
                     <div
                       key={idx}
-                      className="inline-block max-w-[18.75rem] text-sm relative mx-0 my-[.3125rem] bg-[#ffffff] float-left clear-both text-[#8f00fe] px-[.9375rem] py-[.4375rem] rounded-[.875rem_.875rem_.875rem_0]"
+                      className="inline-block max-w-[18.75rem] text-sm relative mx-0 my-[.3125rem] bg-[#ffffff] float-left clear-both text-[#000000] px-[.9375rem] py-[.4375rem] rounded-[.875rem_.875rem_.875rem_0]"
                     >
                       {msgEl?.action === "loading" ? (
                         <div className="flex space-x-1 justify-center items-center bg-white p-[.3125rem] ">
