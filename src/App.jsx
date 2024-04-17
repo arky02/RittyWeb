@@ -40,7 +40,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (isOpen) setCurrImgState({ status: "idle", isStatusChanged: true });
+    if (isOpen) setCurrImgState({ status: "none", isStatusChanged: true });
   }, [isOpen]);
 
   useEffect(() => {
@@ -119,10 +119,7 @@ function App() {
       response.data,
     ]);
 
-    const newImgStatus =
-      response.data.action.toLowerCase() === "none"
-        ? "idle"
-        : response.data.action.toLowerCase();
+    const newImgStatus = response.data.action.toLowerCase();
 
     // change cat's img
     setCurrImgState((prev) => ({
@@ -130,9 +127,9 @@ function App() {
       isStatusChanged: prev.status === newImgStatus,
     }));
 
-    if (!(newImgStatus === "idle" || newImgStatus === "bread")) {
+    if (!(newImgStatus === "none" || newImgStatus === "bread")) {
       setTimeout(() => {
-        setCurrImgState({ status: "idle", isStatusChanged: true });
+        setCurrImgState({ status: "none", isStatusChanged: true });
       }, 4500);
     }
 
@@ -204,7 +201,7 @@ function App() {
       isIdleSecondaryStatus
         ? imgIdxState
           ? currImgState.status
-          : "idle1"
+          : "none1"
         : length === 1
         ? currImgState.status
         : currImgState.status + String(imgIdxState + 1)
@@ -292,7 +289,7 @@ function App() {
               src={require(`./assets/${currImgName}.png`)}
               width={isOpen ? 199 : 209}
               height={isOpen ? 208 : 218}
-              className="relative z-10 "
+              className="relative z-10 mr-[35px] mb-4"
               draggable={false}
               alt="cat ritty"
             ></img>
