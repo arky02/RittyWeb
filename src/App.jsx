@@ -9,6 +9,7 @@ import { useInterval } from "usehooks-ts";
 import useDetectSwipe from "./hooks/useDetectSwipe";
 import usePostFirstVisit from "./hooks/usePostFirstVisit";
 import useHandleInteraction from "./hooks/useHandleInteraction";
+import { reqCurrUser, reqChatResponse } from "./api/capsuleRequests";
 
 function App() {
   const [msgList, setMsgList] = useState([]);
@@ -28,7 +29,7 @@ function App() {
   });
   const [currImgName, setCurrImgName] = useState("bread");
   const [isUserUnique, setIsUserUnique] = useState(false);
-  const [userCount, setUserCount] = useState(0);
+  const [userCount, setUserCount] = useState(null);
 
   const scrollRef = useRef();
 
@@ -40,9 +41,14 @@ function App() {
   const isLangEng = Number(splitUrl[splitUrl.length - 1] === "?lang=en");
 
   useEffect(() => {
-    const isUnique = checkUserUnique();
-    setIsUserUnique(isUnique);
-  }, []);
+    const handleFirstReq = async () => {
+      const isUnique = await checkUserUnique();
+      const currUserCount = await reqCurrUser();
+      setUserCount(currUserCount);
+      setIsUserUnique(isUnique);
+    };
+    handleFirstReq();
+  }, [isEmailModalOpen]);
 
   useEffect(() => {
     if (!isSessionValid())
@@ -162,19 +168,6 @@ function App() {
     }
   }
 
-  const reqChatResponse = async (messageList) => {
-    let response = "";
-    try {
-      response = await axios.post(`https://sam-meows.com/api/meow`, {
-        message: messageList.filter((el) => el.action !== "loading"),
-      });
-    } catch {
-      alert("서버 오류가 발생하였습니다. 잠시 후 다시 시도해 주세요.");
-      return;
-    }
-    return response;
-  };
-
   async function sendEmailToServer() {
     if (emailTxt === "") return;
     if (!validateEmail(emailTxt)) {
@@ -277,7 +270,9 @@ function App() {
           </span>
           <span className="text-[#FB8A59] z-10 relative text-[1.125rem] mt-2">
             {T.AdoptedMsg[isLangEng][0]}
-            <span className="font-semibold">{"12,300"}</span>
+            <span className="font-semibold">
+              {userCount ? userCount * 9 + 50 : "-"}
+            </span>
             {T.AdoptedMsg[isLangEng][1]}
           </span>
         </div>
