@@ -7,6 +7,8 @@ import T from "./utils/switchLang";
 import { useValidateSession } from "./hooks/useValidateSession";
 import { useInterval } from "usehooks-ts";
 import useDetectSwipe from "./hooks/useDetectSwipe";
+import usePostFirstVisit from "./hooks/usePostFirstVisit";
+import useHandleInteraction from "./hooks/useHandleInteraction";
 
 function App() {
   const [msgList, setMsgList] = useState([]);
@@ -25,14 +27,22 @@ function App() {
     isStatusChanged: false,
   });
   const [currImgName, setCurrImgName] = useState("bread");
+  const [isUserUnique, setIsUserUnique] = useState(false);
   const [userCount, setUserCount] = useState(0);
 
   const scrollRef = useRef();
 
   const { onTouchStart, onTouchMove, onTouchEnd, swiped } = useDetectSwipe();
+  const { handleInteraction } = useHandleInteraction();
+  const { checkUserUnique } = usePostFirstVisit();
 
   const splitUrl = window.location.href.split("/");
   const isLangEng = Number(splitUrl[splitUrl.length - 1] === "?lang=en");
+
+  useEffect(() => {
+    const isUnique = checkUserUnique();
+    setIsUserUnique(isUnique);
+  }, []);
 
   useEffect(() => {
     if (!isSessionValid())
@@ -46,6 +56,23 @@ function App() {
   useEffect(() => {
     scrollToBottom();
   }, [msgList]);
+
+  useEffect(() => {
+    if (swiped) {
+      const newInteractionMsg = {
+        id: "user",
+        action: "pet",
+        content: "", // NULL
+      };
+      reqChatResponse([...msgList, newInteractionMsg]);
+      handleInteraction({
+        type: "pet",
+        msgList: [...msgList, newInteractionMsg],
+        isUnique: isUserUnique,
+      });
+      setMsgList((prev) => [...prev, newInteractionMsg]);
+    }
+  }, [swiped]);
 
   const scrollToBottom = () => {
     if (scrollRef.current) {
@@ -103,15 +130,7 @@ function App() {
     setIsChatValid(false);
 
     // get chat response
-    let response = "";
-    try {
-      response = await axios.post(`https://sam-meows.com/api/meow`, {
-        message: messageList.filter((el) => el.action !== "loading"),
-      });
-    } catch {
-      alert("서버 오류가 발생하였습니다. 잠시 후 다시 시도해 주세요.");
-      return;
-    }
+    let response = await reqChatResponse(messageList);
 
     // set new msg
     setMsgList((prev) => [
@@ -119,7 +138,7 @@ function App() {
       response.data,
     ]);
 
-    const newImgStatus = response.data.action.toLowerCase();
+    const newImgStatus = response.data?.action.toLowerCase();
 
     // change cat's img
     setCurrImgState((prev) => ({
@@ -142,6 +161,19 @@ function App() {
       saveUuidCookie();
     }
   }
+
+  const reqChatResponse = async (messageList) => {
+    let response = "";
+    try {
+      response = await axios.post(`https://sam-meows.com/api/meow`, {
+        message: messageList.filter((el) => el.action !== "loading"),
+      });
+    } catch {
+      alert("서버 오류가 발생하였습니다. 잠시 후 다시 시도해 주세요.");
+      return;
+    }
+    return response;
+  };
 
   async function sendEmailToServer() {
     if (emailTxt === "") return;
@@ -309,7 +341,7 @@ function App() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
               >
-                <span className="absolute top-7 right-[84px]">💓</span>
+                <span className="absolute -top-[3px] right-[120px]">💓</span>
               </motion.div>
             )}
           </AnimatePresence>
@@ -328,30 +360,32 @@ function App() {
               )}
 
               {msgList.length > 0 &&
-                msgList.map((msgEl, idx) =>
-                  msgEl?.id === "user" ? (
-                    <div
-                      key={idx}
-                      className="inline-block max-w-[18.75rem] text-sm relative mx-0 my-[.3125rem] bg-[#FB8A59] float-right clear-both text-white px-[.9375rem] py-[.4375rem] rounded-[.875rem_.875rem_0_.875rem]"
-                    >
-                      {msgEl.content}
-                    </div>
-                  ) : (
-                    <div
-                      key={idx}
-                      className="inline-block max-w-[18.75rem] text-sm relative mx-0 my-[.3125rem] bg-[#ffffff] float-left clear-both text-[#000000] px-[.9375rem] py-[.4375rem] rounded-[.875rem_.875rem_.875rem_0]"
-                    >
-                      {msgEl?.action === "loading" ? (
-                        <div className="flex space-x-1 justify-center items-center bg-white p-[.3125rem] ">
-                          <div className="h-[.3125rem] w-[.3125rem] bg-[#a8a8a8] rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-                          <div className="h-[.3125rem] w-[.3125rem] bg-[#a8a8a8] rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-                          <div className="h-[.3125rem] w-[.3125rem] bg-[#a8a8a8] rounded-full animate-bounce"></div>
-                        </div>
-                      ) : (
-                        msgEl?.content
-                      )}
-                    </div>
-                  )
+                msgList.map(
+                  (msgEl, idx) =>
+                    msgEl?.content !== "" &&
+                    (msgEl?.id === "user" ? (
+                      <div
+                        key={idx}
+                        className="inline-block max-w-[18.75rem] text-sm relative mx-0 my-[.3125rem] bg-[#FB8A59] float-right clear-both text-white px-[.9375rem] py-[.4375rem] rounded-[.875rem_.875rem_0_.875rem]"
+                      >
+                        {msgEl.content}
+                      </div>
+                    ) : (
+                      <div
+                        key={idx}
+                        className="inline-block max-w-[18.75rem] text-sm relative mx-0 my-[.3125rem] bg-[#ffffff] float-left clear-both text-[#000000] px-[.9375rem] py-[.4375rem] rounded-[.875rem_.875rem_.875rem_0]"
+                      >
+                        {msgEl?.action === "loading" ? (
+                          <div className="flex space-x-1 justify-center items-center bg-white p-[.3125rem] ">
+                            <div className="h-[.3125rem] w-[.3125rem] bg-[#a8a8a8] rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                            <div className="h-[.3125rem] w-[.3125rem] bg-[#a8a8a8] rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                            <div className="h-[.3125rem] w-[.3125rem] bg-[#a8a8a8] rounded-full animate-bounce"></div>
+                          </div>
+                        ) : (
+                          msgEl?.content
+                        )}
+                      </div>
+                    ))
                 )}
             </div>
 
