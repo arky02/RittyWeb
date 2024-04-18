@@ -24,7 +24,7 @@ function Modal({
           <p className="text-[#898989] w-[260px]">{description}</p>
 
           <button
-            className={`w-[280px] h-[50px] bg-[#8242D4] text-white rounded-[30px] font-bold mt-[10px]`}
+            className={`w-[280px] h-[50px] bg-[#FB8A59] text-white rounded-[30px] font-bold mt-[10px]`}
             onClick={onClose}
           >
             {buttonText}
