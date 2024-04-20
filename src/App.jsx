@@ -292,7 +292,7 @@ function App() {
                   className="bg-[#FB8A59] rounded-[.625rem] text-[#ffffff] px-[0.9rem] font-semibold h-[3.125rem] whitespace-nowrap"
                   disabled={isEmailSubmitted}
                   style={{
-                    backgroundColor: isEmailSubmitted ? "#ccadf5" : "#FB8A59",
+                    backgroundColor: isEmailSubmitted ? "#f0b49b" : "#f0b49b",
                   }}
                 >
                   {T.EnterEmail[isLangEng]}
