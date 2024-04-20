@@ -271,7 +271,7 @@ function App() {
           <span className="text-[#FB8A59] z-10 relative text-[1.125rem] mt-2">
             {T.AdoptedMsg[isLangEng][0]}
             <span className="font-semibold">
-              {userCount ? userCount * 9 + 50 : "-"}
+              {userCount ? userCount * 3 + 25 : "-"}
             </span>
             {T.AdoptedMsg[isLangEng][1]}
           </span>
