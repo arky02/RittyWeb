@@ -48,9 +48,9 @@ function App() {
       setUserCount(currUserCount);
       setIsUserUnique(isUnique);
     };
-    handleFirstReq();
+  handleFirstReq();
   }, [isEmailModalOpen]);
-
+  
   useEffect(() => {
     if (!isSessionValid())
       setCurrImgState({ status: "sleepy", isStatusChanged: true });
